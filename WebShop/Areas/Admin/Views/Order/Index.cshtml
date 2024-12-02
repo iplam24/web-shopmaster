@@ -1,0 +1,123 @@
+﻿
+<div class="container">
+    <div class="row pt-4 pb-3">
+        <div class="col-6">
+            <h2 class="text-primary">
+                DANH SÁCH ĐƠN HÀNG
+            </h2>
+        </div>
+        
+    </div>
+</div>
+<div class="input-group mb-3">
+    <input type="text" class="form-control" id="searchInput" placeholder="Nhập từ khóa tìm kiếm đơn hàng">
+</div>
+
+<table class="table table-bordered table-striped" style="width:100%">
+
+    
+    <thead>
+        <tr>
+            <th>Số đơn hàng</th>
+            <th>Tên</th>
+            <th>Số điện thoại</th>
+            <th>Email</th>
+            <th>Trạng thái</th>
+            <th>Tổng cộng</th>
+            <th>Ngày đặt bánh</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody id="orderTableBody">
+        <!-- Dữ liệu sẽ được thêm vào đây -->
+    </tbody>
+    
+
+</table>
+<ul id="pagination" class="list-inline"></ul>
+@section Scripts{
+    <script>
+        $(document).ready(function () {
+            var orders = []; // Lưu trữ dữ liệu đơn hàng
+            var pageSize = 10; // Số lượng đơn hàng trên mỗi trang
+            var currentPage = 1; // Trang hiện tại
+
+            // Gọi API để lấy dữ liệu
+            $.ajax({
+                type: 'GET',
+                url: '/Admin/Order/GetAll',
+                success: function (data) {
+                    // Xử lý dữ liệu trả về
+                    orders = data.data;
+                    displayOrders(orders, currentPage); // Hiển thị đơn hàng trang đầu tiên
+                    renderPagination(orders.length);
+                }
+            });
+
+            function displayOrders(orders, page) {
+                var tableBody = $('#orderTableBody'); // ID của phần tử HTML để chứa dữ liệu
+                // Xóa dữ liệu cũ trong bảng
+                tableBody.empty();
+
+                // Tính vị trí bắt đầu và kết thúc của trang hiện tại
+                var startIndex = (page - 1) * pageSize;
+                var endIndex = startIndex + pageSize;
+
+                // Duyệt qua từng đơn hàng trên trang hiện tại và thêm vào bảng
+                for (var i = startIndex; i < endIndex && i < orders.length; i++) {
+                    var order = orders[i];
+                    var orderDate = new Date(order.orderDate);
+                    var formattedDate = orderDate.toLocaleDateString();
+                    // Thêm liên kết chi tiết vào mỗi hàng của bảng
+                    var detailsLink = '/admin/order/details?orderId=' + order.id;
+                    var detailsButton = '<a href="' + detailsLink + '" class="btn btn-primary mx-2"> <i class="bi bi-pencil-square"> Chi Tiết</i></a>';
+                    tableBody.append('<tr><td>' + order.id + '</td><td>' + order.name + '</td><td>' + order.phoneNumber + '</td><td>' + order.applicationUser.email + '</td><td>' + order.orderStatus + '</td><td>' + order.orderTotal + '</td><td>' + formattedDate + '</td><td>' + detailsButton + '</td></tr>');
+                }
+            }
+
+            function renderPagination(totalOrders) {
+                var totalPages = Math.ceil(totalOrders / pageSize);
+                var pagination = $('#pagination');
+
+                // Xóa dữ liệu cũ trong phân trang
+                pagination.empty();
+
+                // Tạo nút cho từng trang
+                for (var i = 1; i <= totalPages; i++) {
+                    var pageLink = '<li class="list-inline-item"><a class="page-link" href="#" onclick="changePage(' + i + ')">' + i + '</a></li>';
+                    pagination.append(pageLink);
+                }
+            }
+
+            window.changePage = function (page) {
+                currentPage = page;
+                displayOrders(orders, currentPage);
+            };
+
+            // Xử lý sự kiện khi người dùng nhập vào ô tìm kiếm
+            $('#searchInput').on('input', function () {
+                performSearch();
+            });
+
+            function performSearch() {
+                var searchTerm = $('#searchInput').val().toLowerCase();
+
+                // Lọc dữ liệu theo từ khóa tìm kiếm
+                var filteredOrders = orders.filter(function (order) {
+                    return (
+                        order.name.toLowerCase().includes(searchTerm) ||
+                        order.phoneNumber.toLowerCase().includes(searchTerm) ||
+                        order.applicationUser.email.toLowerCase().includes(searchTerm) ||
+                        order.orderStatus.toLowerCase().includes(searchTerm) ||
+                        order.orderTotal.toString().includes(searchTerm)
+                    );
+                });
+
+                // Hiển thị kết quả tìm kiếm
+                displayOrders(filteredOrders, 1); // Hiển thị kết quả trên trang đầu tiên
+                renderPagination(filteredOrders.length);
+            }
+        });
+
+    </script>
+}

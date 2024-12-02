@@ -1,0 +1,149 @@
+﻿@page
+@model RegisterModel
+
+
+<h1 class="d-flex justify-content-center">@ViewData["Title"]</h1>
+
+<div class="row">
+    <div class="card-header bg-secondary bg-gradient m-lg-0 py-4">
+        <div class="row">
+            <div class="col-12 text-center">
+                @if (User.IsInRole(SD.Role_Admin))
+                {
+                    <h2 class="py-2 text-black "> Đăng ký - Nhân viên - công ty - người dùng</h2>
+                }
+                else
+                {
+
+                    <h2 class="py-2 text-black "> Đăng ký</h2>
+                }
+                
+            </div>
+        </div>
+    </div>
+    <div class=" d-flex justify-content-center">
+
+        <form id="registerForm" asp-route-returnUrl="@Model.ReturnUrl" method="post">
+            <h2 style="color:#fff;" >----------------------------------------------</h2>
+            <hr />
+            <div asp-validation-summary="ModelOnly" class="text-danger" role="alert"></div>
+            <div class="form-floating mb-3">
+                <input asp-for="Input.Email" class="form-control" autocomplete="username" aria-required="true" placeholder="name@example.com" />
+                <label asp-for="Input.Email">Email</label>
+                <span asp-validation-for="Input.Email" class="text-danger"></span>
+            </div>
+            <div class="form-floating mb-3 ">
+                <input asp-for="Input.Name" class="form-control" placeholder="name@example.com" />
+                <label asp-for="Input.Name" class="ms-2 text-muted">Họ và tên</label>
+                <span asp-validation-for="Input.Name" class="text-danger"></span>
+            </div>
+            <div class="form-floating mb-3 ">
+                <input asp-for="Input.PhoneNumber" class="form-control" placeholder="name@example.com" />
+                <label asp-for="Input.PhoneNumber" class="ms-2 text-muted">Số điện thoại</label>
+                <span asp-validation-for="Input.PhoneNumber" class="text-danger"></span>
+            </div>
+            <div class="form-floating mb-3">
+                <input asp-for="Input.Password" class="form-control" autocomplete="new-password" aria-required="true" placeholder="password" />
+                <label asp-for="Input.Password">Mật khẩu</label>
+                <span asp-validation-for="Input.Password" class="text-danger"></span>
+            </div>
+            <div class="form-floating mb-3">
+                <input asp-for="Input.ConfirmPassword" class="form-control" autocomplete="new-password" aria-required="true" placeholder="password" />
+                <label asp-for="Input.ConfirmPassword">Nhập lại mật khẩu</label>
+                <span asp-validation-for="Input.ConfirmPassword" class="text-danger"></span>
+            </div>
+            <div class="form-floating mb-3">
+                <input asp-for="Input.StreetAddress" class="form-control"  placeholder="name@example.com" />
+                <label asp-for="Input.StreetAddress">Địa chỉ</label>
+                <span asp-validation-for="Input.StreetAddress" class="text-danger"></span>
+            </div>
+            <div class="form-floating mb-3">
+                <input asp-for="Input.City" class="form-control" placeholder="name@example.com" />
+                <label asp-for="Input.City">Thành Phố - Tỉnh</label>
+                <span asp-validation-for="Input.City" class="text-danger"></span>
+            </div>
+            @* <div class="form-floating mb-3">
+                <input asp-for="Input.PostalCode" class="form-control" placeholder="name@example.com" />
+                <label asp-for="Input.PostalCode">Mã bưu điện</label>
+                <span asp-validation-for="Input.PostalCode" class="text-danger"></span>
+            </div> *@
+           
+            @if(User.IsInRole(SD.Role_Admin))
+            {
+                <div class="form-floating mb-3">
+                    <select asp-for="Input.Role" asp-items="@Model.Input.RoleList" class="form-select">
+                        <option disabled selected>Chọn vai trò</option>
+                    </select>
+
+                </div>
+                @* <div class="form-floating mb-3">
+                    <select asp-for="Input.CompanyId" asp-items="@Model.Input.CompanyList" class="form-select">
+                        <option disabled selected>- Chọn công ty -</option>
+                    </select>
+
+                </div> *@
+            }
+            
+            <button id="registerSubmit" type="submit" class="w-100 btn btn-lg btn-primary">Đăng ký</button>
+            @if (!User.IsInRole(SD.Role_Admin))
+            {
+            <div class="text-center  mt-3">
+                <p>Bạn đã có tài khoản? <a asp-page="./Login" asp-route-returnUrl="@Model.ReturnUrl">Đăng nhập</a></p>
+            </div>
+            }
+        </form>
+
+        <!-- Register buttons -->
+       
+    </div>
+  @*   @if (!User.IsInRole(SD.Role_Admin))
+    {
+        <div class="col-md-6 col-md-offset-2">
+            <section>
+                <h3>SỬ DỤNG DỊCH VỤ KHÁC ĐỂ ĐĂNG KÝ.</h3>
+                <hr />
+                @{
+                    if ((Model.ExternalLogins?.Count ?? 0) == 0)
+                    {
+                        <div>
+                            <p>
+                               TÌnh năng ĐK qua FB đang lỗi
+                            </p>
+                        </div>
+                    }
+                    else
+                    {
+                        <form id="external-account" asp-page="./ExternalLogin" asp-route-returnUrl="@Model.ReturnUrl" method="post" class="form-horizontal">
+                            <div>
+                                <p>
+                                    @foreach (var provider in Model.ExternalLogins!)
+                                    {
+                                        <button type="submit" class="btn btn-primary" name="provider" value="@provider.Name" title="Log in using your @provider.DisplayName account">@provider.DisplayName</button>
+                                    }
+                                </p>
+                            </div>
+                        </form>
+                    }
+                }
+            </section>
+        </div>
+    } *@
+   
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    <script>
+        $(document).ready(function () {
+            $('#Input_CompanyId').hide();
+            $('#Input_Role').change(function () {
+                var selection = $('#Input_Role Option:Selected').text();
+                if (selection == 'Company') {
+                    $('#Input_CompanyId').show();
+                }else{
+                    $('#Input_CompanyId').hide();
+                }
+            })
+        })
+    </script>
+}

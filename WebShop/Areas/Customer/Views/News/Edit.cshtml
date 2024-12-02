@@ -1,0 +1,65 @@
+﻿@model News
+
+<form method="post">
+    @*<input asp-for="Id" />*@
+
+    <div class="border p-3 mt-4">
+
+        <div class="row pb-2">
+            <h2 class="text-primary"> Chi tiết</h2>
+            <hr />
+
+        </div>
+        <div asp-validation-summary="All"></div>
+        <div class="mb-3 row p-3">
+            <label asp-for="Name" class="p-2"></label>
+            <input  asp-for="Name" type="text" class="form-control" />
+            <span asp-validation-for="Name" class="text-danger"></span>
+        </div>
+        <div class="mb-3 row p-3">
+            <label asp-for="Email" class="p-2"></label>
+            <input asp-for="Email" type="text" class="form-control" />
+            <span asp-validation-for="Email" class="text-danger"></span>
+        </div>
+        <div class="mb-3 row p-3">
+            <label asp-for="Nummber" class="p-2"></label>
+            <input asp-for="Nummber" type="text" class="form-control" />
+            <span asp-validation-for="Nummber" class="text-danger"></span>
+        </div>
+        <div class="mb-3 row p-1">
+            <label asp-for="Description" class="p-2 text-mute"></label>
+            <textarea asp-for="Description" type="text" class="form-control"></textarea>
+        </div>
+
+
+        <div class="mb-3 row p-1">
+           
+
+            <div class="row p-4">
+                <div class="col-6 col-md-3">
+                    <button type="submit" class="btn btn-primary form-control">Cập nhật</button>
+
+                </div>
+                <div class="col-6 col-md-3">
+                    <a asp-controller="News" asp-action="Index" class="btn btn-outline-secondary  form-control">Quay trở về danh sách</a>
+                </div>
+
+            </div>
+
+        </div>
+
+
+    </div>
+</form>
+@section Scripts{
+    @{
+        <script>
+            tinymce.init({
+                selector: 'textarea',
+                plugins: '  mentions anchor autolink charmap codesample emoticons  searchreplace table visualblocks wordcount  ',
+                toolbar: 'undo redo | blocks fontfamily fontsize | bold italic underline strikethrough |  align lineheight  | '
+            });
+        </script>
+        <partial name="_ValidationScriptsPartial" />
+    }
+}

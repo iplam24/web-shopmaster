@@ -1,0 +1,516 @@
+﻿@model List<IGrouping<Category, Product>>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+ 
+
+    <!-- Google Web Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600&family=Raleway:wght@600;800&display=swap" rel="stylesheet">
+
+    <!-- Icon Font Stylesheet -->
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.4/css/all.css" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.1/font/bootstrap-icons.css" rel="stylesheet">
+
+    <!-- Libraries Stylesheet -->
+    <link href="~/home/lib/lightbox/css/lightbox.min.css" rel="stylesheet" />
+
+    <link href="~/home/lib/owlcarousel/assets/owl.carousel.min.css" rel="stylesheet" />
+
+    <!-- Customized Bootstrap Stylesheet -->
+    <link href="~/home/css/bootstrap.min.css" rel="stylesheet" />
+    <!-- Template Stylesheet -->
+    <link href="~/home/css/style.css" rel="stylesheet" />
+</head>
+<body>
+
+    <!-- Hero Start -->
+    <div class="container-fluid py-5 mb-5 ">
+        <div class="container py-5">
+            <div class="row g-5 align-items-center">
+                <div class="col-md-12 col-lg-7">
+                    <h4 class="mb-3 text-secondary">100% Chuẩn an toàn vệ sinh thực phẩm</h4>
+                    <h1 class="mb-5 display-3 text-primary">Bánh Sinh Nhật & <br />Sản Phẩm Handmade cao cấp </h1>
+                    
+                </div>
+                <div class="col-md-12 col-lg-5">
+                    <div id="carouselId" class="carousel slide position-relative" data-bs-ride="carousel">
+                        <div class="carousel-inner" role="listbox">
+                            <div class="carousel-item rounded">
+                                <img src="~/home/img/TET.jpg" class="img-fluid  rounded" style="width:493px; height:328px; alt="Second slide">
+                                <a href="https://localhost:7071/?categoryId=12" class="btn px-4 py-2 text-white rounded">Bánh Dịp Tết </a>
+                            </div>
+                            <div class="carousel-item active rounded">
+                                <img src="~/home/img/COOKIES-3.webp" class="img-fluid  bg-secondary rounded" style="width:493px; height:328px;" alt="First slide">
+                                <a href="#" class="btn px-4 py-2 text-white rounded">Bánh Sinh Nhật</a>
+                            </div>
+                           
+                            <div class="carousel-item rounded">
+                                <img src="~/home/img/COOKIES-2.webp" class="img-fluid  rounded" style="width:493px; height:328px; alt="Second slide">
+                                <a href="#" class="btn px-4 py-2 text-white rounded">Bánh Handmade </a>
+                            </div>
+                        </div>
+                        <button class="carousel-control-prev" type="button" data-bs-target="#carouselId" data-bs-slide="prev">
+                            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                            <span class="visually-hidden">Previous</span>
+                        </button>
+                        <button class="carousel-control-next" type="button" data-bs-target="#carouselId" data-bs-slide="next">
+                            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                            <span class="visually-hidden">Next</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Hero End -->
+    <!-- Cake Shop Start-->
+
+    <div class="container-fluid vesitable py-3">
+
+        <div class="container py-5">
+            @{
+                var categoryIdToShow = 11; // Chỉ hiển thị sản phẩm của category có Id = 1
+                var categoryToShow = Model.FirstOrDefault(g => g.Key.Id == categoryIdToShow);
+            }
+            @if (categoryToShow != null)
+            {
+                <h1 class="mb-0">@categoryToShow.Key.Name</h1>
+
+                <div class="owl-carousel vegetable-carousel justify-content-center">
+                    @foreach (var product in categoryToShow)
+                    {
+                        <div class="border border-primary rounded position-relative vesitable-item">
+                            <div class="vesitable-img">
+                                @if (product.ProductImages != null && product.ProductImages.Count() > 0)
+                                {
+                                    <img src="@product.ProductImages.FirstOrDefault().ImageUrl" class="card-img-top rounded" style="height: 260px" ; />
+                                }
+                                else
+                                {
+                                    <img src="https://placehold.co/500x600/png" class="card-img-top rounded" />
+                                }
+                            </div>
+                            <div class="text-white bg-primary px-3 py-1 rounded position-absolute" style="top: 10px; right: 10px;">Bán chạy</div>
+                            <div class="p-4 rounded-bottom">
+                                <h4>@product.Title</h4>
+                                <p>@Html.Raw(@product.Description)</p>
+                                <div class="d-flex justify-content-between flex-lg-wrap">
+                                    <p class="text-dark fs-5 fw-bold mb-0">@product.Price.ToString("c"+"0")</p>
+                                    <a asp-action="Details" asp-route-productId="@product.Id" class="btn border border-secondary rounded-pill px-3 text-primary"><i class="fa fa-shopping-bag me-2 text-primary"></i>Chi Tiết</a>
+                                </div>
+                            </div>
+                        </div>
+                    }
+
+                </div>
+                <div class="d-flex flex-row-reverse">
+                    <a href="https://localhost:7071/Customer/Home/Index?categoryId=11" class="p-2 ">Tất cả sản phẩm</a>
+                </div>
+            }
+            else
+            {
+                <p>Không có danh mục hoặc sản phẩm nào được tìm thấy.</p>
+            }
+        </div>
+    </div>
+    <!--end st-->
+
+    <!-- Featurs Section Start -->
+    <div class="container-fluid featurs py-5">
+        <div class="container py-5">
+            <div class="row g-4">
+                <div class="col-md-6 col-lg-3">
+                    <div class="featurs-item text-center rounded bg-light p-4">
+                        <div class="featurs-icon btn-square rounded-circle bg-secondary mb-5 mx-auto">
+                            <i class="fas fa-car-side fa-3x text-white"></i>
+                        </div>
+                        <div class="featurs-content text-center">
+                            <h5>Miễn Phí Vận Chuyển</h5>
+                            <p class="mb-0">Miễn phí đơn hàng từ 400.00 đ</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6 col-lg-3">
+                    <div class="featurs-item text-center rounded bg-light p-4">
+                        <div class="featurs-icon btn-square rounded-circle bg-secondary mb-5 mx-auto">
+                            <i class="fas fa-user-shield fa-3x text-white"></i>
+                        </div>
+                        <div class="featurs-content text-center">
+                            <h5>Bảo Mật Thông Tin</h5>
+                            <p class="mb-0">Quản lý thông tin an toàn</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6 col-lg-3">
+                    <div class="featurs-item text-center rounded bg-light p-4">
+                        <div class="featurs-icon btn-square rounded-circle bg-secondary mb-5 mx-auto">
+                            <i class="fas fa-exchange-alt fa-3x text-white"></i>
+                        </div>
+                        <div class="featurs-content text-center">
+                            <h5>Xử Lý Nhanh</h5>
+                            <p class="mb-0">Xử lý vấn đề cấp tốc</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6 col-lg-3">
+                    <div class="featurs-item text-center rounded bg-light p-4">
+                        <div class="featurs-icon btn-square rounded-circle bg-secondary mb-5 mx-auto">
+                            <i class="fa fa-phone-alt fa-3x text-white"></i>
+                        </div>
+                        <div class="featurs-content text-center">
+                            <h5>Hỗ Trợ 24/7 </h5>
+                            <p class="mb-0">Hỗ trợ nhiệt tình</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+    <!-- Banner Section Start-->
+    <div class="container-fluid banner my-5" style="background:#df6060;">
+        <div class="container py-5">
+            <div class="row g-4 align-items-center">
+                <div class="col-lg-6">
+                    <div class="py-4">
+                        <h1 class="display-3 text-white">Set quà năm mới</h1>
+                        <p class="fw-normal display-3 text-dark mb-4">Tết 2024</p>
+                        <p class="mb-4 text-white">Tết nguyên đán là ngày lễ truyền thống của cả dân tộc, quan trọng và ý nghĩa nhất trong năm đối với người dân Việt Nam. Dù có bận mải công việc đến đâu, đi xa đến đâu, mọi người cũng đều cố gắng thu xếp công việc để về quê đón Tết cùng gia đình và người thân.  Đây là khoảng thời gian thiêng liêng, ấm áp, bình yên và đem đến trong mỗi người một cảm xúc riêng biệt.</p>
+                        <a href="https://localhost:7071/Customer/Home/Index?categoryId=12" class="banner-btn btn border-2 border-white rounded-pill text-dark py-3 px-5">Tham khảo</a>
+                    </div>
+                </div>
+                <div class="col-lg-6">
+                    <div class="position-relative">
+                        <img src="~/home/img/tet.jpg" class="img-fluid w-100 rounded" alt="">
+
+                        <div class="d-flex align-items-center justify-content-center bg-white rounded-circle position-absolute" style="width: 100px; height: 100px; top: 0; left: 0;">
+                            <div class="d-flex flex-column">
+                                <span class="h2 mb-0">New</span>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Banner Section End -->
+    <!-- Tết Shop Start-->
+
+    <div class="container-fluid vesitable py-3">
+
+        <div class="container py-5">
+            @{
+                var categoryIdToShow_tet = 12;
+                var categoryToShow_tet = Model.FirstOrDefault(g => g.Key.Id == categoryIdToShow_tet);
+            }
+            @if (categoryToShow_tet != null)
+            {
+                <h1 class="mb-0">@categoryToShow_tet.Key.Name</h1>
+
+                <div class="owl-carousel vegetable-carousel justify-content-center">
+                    @foreach (var product in categoryToShow_tet)
+                    {
+                        <div class="border border-primary rounded position-relative vesitable-item">
+                            <div class="vesitable-img">
+                                @if (product.ProductImages != null && product.ProductImages.Count() > 0)
+                                {
+                                    <img src="@product.ProductImages.FirstOrDefault().ImageUrl" class="card-img-top rounded" style="height: 260px" ; />
+                                }
+                                else
+                                {
+                                    <img src="https://placehold.co/500x600/png" class="card-img-top rounded" />
+                                }
+                            </div>
+                            <div class="text-white bg-primary px-3 py-1 rounded position-absolute" style="top: 10px; right: 10px;">Mới nhất</div>
+                            <div class="p-4 rounded-bottom">
+                                <h4>@product.Title</h4>
+
+                                <div class="d-flex justify-content-between flex-lg-wrap">
+                                    <p class="text-dark fs-5 fw-bold mb-0">@product.Price.ToString("c"+"0")</p>
+                                    <a asp-action="Details" asp-route-productId="@product.Id" class="btn border border-secondary rounded-pill px-3 text-primary"><i class="fa fa-shopping-bag me-2 text-primary"></i> Chi Tiết</a>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                </div>
+                <div class="d-flex flex-row-reverse">
+                    <a href="https://localhost:7071/Customer/Home/Index?categoryId=12" class="p-2 ">Tất cả sản phẩm</a>
+                </div>
+            }
+            else
+            {
+                <p>Không có danh mục hoặc sản phẩm nào được tìm thấy.</p>
+            }
+        </div>
+    </div>
+  
+    <!-- banchay Product Start -->
+    <div class="container-fluid py-5">
+        @{
+            var categoryIdToShow_run = 6;
+            var categoryToShow_run = Model.FirstOrDefault(g => g.Key.Id == categoryIdToShow_run);
+            var categoryIdToShow_run02 = 7;
+            var categoryToShow_run02 = Model.FirstOrDefault(g => g.Key.Id == categoryIdToShow_run02);
+
+        }
+        <div class="container py-5">
+            <div class="text-center mx-auto mb-5" style="max-width: 700px;">
+                <h1 class="display-4">Sản phẩm được yêu thích</h1>
+                <p>Ngon - chất lượng</p>
+            </div>
+            
+            <div class="row g-4">
+                 @foreach (var product in categoryToShow_run)
+                {
+                <div class="col-lg-6 col-xl-4">    
+                    <div class="p-4 rounded bg-light">
+                   
+                        <div class="row align-items-center">
+                            <div class="col-6">
+                                    @if (product.ProductImages != null && product.ProductImages.Count() > 0)
+                                    {
+                                        <img src="@product.ProductImages.FirstOrDefault().ImageUrl" class="card-img-top rounded" style="height: 260px" ; />
+                                    }
+                                    else
+                                    {
+                                        <img src="https://placehold.co/500x600/png" class="card-img-top rounded" />
+                                    }
+                            </div>
+                            <div class="col-6">
+                                    <a href="#" class="h5">@product.Title</a>
+                                <div class="d-flex my-3">
+                                    <i class="fas fa-star text-primary"></i>
+                                    <i class="fas fa-star text-primary"></i>
+                                    <i class="fas fa-star text-primary"></i>
+                                    <i class="fas fa-star text-primary"></i>
+                                    <i class="fas fa-star"></i>
+                                </div>
+                                    <h4 class="mb-3">@product.Price.ToString("c"+"0")</h4>
+                                    <a asp-action="Details" asp-route-productId="@product.Id" class="btn border border-secondary rounded-pill px-3 text-primary"><i class="fa fa-shopping-bag me-2 text-primary"></i>  Chi Tiết</a>
+                            </div>
+                        </div>
+                        
+                    </div>
+                   
+                </div>
+                }
+               
+            </div>
+        </div>
+        <div class="container py-5">
+            <div class="row g-4">
+                @foreach (var product in categoryToShow_run02)
+                {
+                    <div class="col-lg-6 col-xl-4">
+                        <div class="p-4 rounded bg-light">
+
+                            <div class="row align-items-center">
+                                <div class="col-6">
+                                    @if (product.ProductImages != null && product.ProductImages.Count() > 0)
+                                    {
+                                        <img src="@product.ProductImages.FirstOrDefault().ImageUrl" class="card-img-top rounded" style="height: 260px" ; />
+                                    }
+                                    else
+                                    {
+                                        <img src="https://placehold.co/500x600/png" class="card-img-top rounded" />
+                                    }
+                                </div>
+                                <div class="col-6">
+                                    <a href="#" class="h5">@product.Title</a>
+                                    <div class="d-flex my-3">
+                                        <i class="fas fa-star text-primary"></i>
+                                        <i class="fas fa-star text-primary"></i>
+                                        <i class="fas fa-star text-primary"></i>
+                                        <i class="fas fa-star text-primary"></i>
+                                        <i class="fas fa-star"></i>
+                                    </div>
+                                    <h4 class="mb-3">@product.Price.ToString("c"+"0")</h4>
+                                    <a asp-action="Details" asp-route-productId="@product.Id" class="btn border border-secondary rounded-pill px-3 text-primary"><i class="fa fa-shopping-bag me-2 text-primary"></i>  Chi Tiết</a>
+                                </div>
+                            </div>
+
+                        </div>
+
+                    </div>
+                }
+
+            </div>
+        </div>
+    </div>
+    <!-- Bestsaler Product End -->
+    <!-- Fact Start -->
+    <div class="container-fluid py-5">
+        <div class="container">
+            <div class="bg-light p-5 rounded">
+                <div class="row g-4 justify-content-center">
+                    <div class="col-md-6 col-lg-6 col-xl-3">
+                        <div class="counter bg-white rounded p-5">
+                            <i class="fa fa-users text-secondary"></i>
+                            <h4>KHÁCH HÀNG HÀI LÒNG</h4>
+                            <h1>1963</h1>
+                        </div>
+                    </div>
+                    <div class="col-md-6 col-lg-6 col-xl-3">
+                        <div class="counter bg-white rounded p-5">
+                            <i class="fa fa-certificate text-secondary"></i>
+                            <h4>CHẤT LƯỢNG DỊCH VỤ</h4>
+                            <h1>99%</h1>
+                        </div>
+                    </div>
+                    <div class="col-md-6 col-lg-6 col-xl-3">
+                        <div class="counter bg-white rounded p-5">
+                            <i class="fa fa-paper-plane text-secondary"></i>
+                            <h4>Phản hồi nhanh</h4>
+                            <h1>24/7</h1>
+                        </div>
+                    </div>
+                    <div class="col-md-6 col-lg-6 col-xl-3">
+                        <div class="counter bg-white rounded p-5">
+                            <i class="fa fa-heart text-secondary"></i>
+                            <h4>Được yêu thích nhất</h4>
+                            <h1>99%</h1>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Fact Start -->
+    <!-- Tastimonial Start -->
+    <div class="container-fluid testimonial py-5">
+        <div class="container py-5">
+            <div class="testimonial-header text-center">
+                <h4 class="text-primary">Đánh giá của khác hàng</h4>
+                <h1 class="display-5 mb-5 text-dark">Khách hàng của chúng tôi bảo thế!</h1>
+            </div>
+            <div class="owl-carousel testimonial-carousel">
+                <div class="testimonial-item img-border-radius bg-light rounded p-4">
+                    <div class="position-relative">
+                        <i class="fa fa-quote-right fa-2x text-secondary position-absolute" style="bottom: 30px; right: 0;"></i>
+                        <div class="mb-4 pb-4 border-bottom border-secondary">
+                            <p class="mb-0">
+                                Bánh ngon, mềm và thơm nữa đúng gu của mình. Mẫu mã cũng rất đa dạng. Rất đáng để thử. </br>
+                                Ăn xong logic mượt hơn dùng tool. </br>
+                                Ai biết gì đâu :))
+                            </p>
+                        </div>
+                        <div class="d-flex align-items-center flex-nowrap">
+                            <div class="bg-secondary rounded">
+                                <img src="~/home/img/faker_2020_interview.jpg" class="img-fluid rounded" style="width: 100px; height: 100px;" alt="">
+                               
+                            </div>
+                            <div class="ms-4 d-block">
+                                <h4 class="text-dark">Faker </h4>
+                                <p class="m-0 pb-3">Gamer</p>
+                                <div class="d-flex pe-5">
+                                    <i class="fas fa-star text-primary"></i>
+                                    <i class="fas fa-star text-primary"></i>
+                                    <i class="fas fa-star text-primary"></i>
+                                    <i class="fas fa-star text-primary"></i>
+                                    <i class="fas fa-star"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="testimonial-item img-border-radius bg-light rounded p-4">
+                    <div class="position-relative">
+                        <i class="fa fa-quote-right fa-2x text-secondary position-absolute" style="bottom: 30px; right: 0;"></i>
+                        <div class="mb-4 pb-4 border-bottom border-secondary">
+                            <p class="mb-0">
+                                Bánh ngon, trang trí đẹp và lên hình rất xinh luôn. Bánh xoài chanh leo vị thơm cực kì. Bánh không bị ngọt vị hóa học. Lần đầu mua và rất hài lòng. Rất cám ơn . Tại sao anh chọn orianna mà không phải ahri.(ăn bánh cái anh phũ cũng vẫn ngon)
+                            </p>
+                        </div>
+                        <div class="d-flex align-items-center flex-nowrap">
+                            <div class="bg-secondary rounded">
+                                <img src="~/home/img/faker-t1-ahri.jpg"  class="img-fluid rounded" style="width: 100px; height: 100px;" alt="">
+                               
+                            </div>
+                            <div class="ms-4 d-block">
+                                <h4 class="text-dark">Nari </h4>
+                                <p class="m-0 pb-3">Cosplay</p>
+                                <div class="d-flex pe-5">
+                                    <i class="fas fa-star text-primary"></i>
+                                    <i class="fas fa-star text-primary"></i>
+                                    <i class="fas fa-star text-primary"></i>
+                                    <i class="fas fa-star text-primary"></i>
+                                    <i class="fas fa-star text-primary"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="testimonial-item img-border-radius bg-light rounded p-4">
+                    <div class="position-relative">
+                        <i class="fa fa-quote-right fa-2x text-secondary position-absolute" style="bottom: 30px; right: 0;"></i>
+                        <div class="mb-4 pb-4 border-bottom border-secondary">
+                            <p class="mb-0">
+                                Lói chung bánh ngon, công ty rất thích. Lần nào cũng ưng ý! Bánh có độ ngọt vừa và thanh chứ không kiểu đường hóa học. Ăn cũng không bị ngấy.
+                                Ăn lấy sức chơi game nha các con giời.
+                            </p>
+                        </div>
+                        <div class="d-flex align-items-center flex-nowrap">
+                            <div class="bg-secondary rounded">
+                                <img src="~/home/img/ys.webp" class="img-fluid rounded" style="width: 100px; height: 100px;" alt="">
+                            </div>
+                            <div class="ms-4 d-block">
+                                <h4 class="text-dark">Riot Games</h4>
+                                <p class="m-0 pb-3">Riot Games</p>
+                                <div class="d-flex pe-5">
+                                    <i class="fas fa-star text-primary"></i>
+                                    <i class="fas fa-star text-primary"></i>
+                                    <i class="fas fa-star text-primary"></i>
+                                    <i class="fas fa-star text-primary"></i>
+                                    <i class="fas fa-star text-primary"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Tastimonial End -->
+    <!-- Featurs Section End -->
+    <!-- JavaScript Libraries -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
+
+    <script src="~/home/lib/easing/easing.min.js"></script>
+    <script src="~/home/lib/easing/easing.min.js"></script>
+    <script src="~/home/lib/waypoints/waypoints.min.js"></script>
+    <script src="~/home/lib/lightbox/js/lightbox.min.js"></script>
+    <script src="~/home/lib/owlcarousel/owl.carousel.min.js"></script>
+
+    <!-- Template Javascript -->
+    @section Scripts {
+        <script>
+            document.addEventListener("DOMContentLoaded", function () {
+                // Kiểm tra xem bạn có ở trang chủ hay không
+                if (window.location.pathname === '/') {
+                    // Nếu ở trang chủ, hiển thị thông báo
+                    Swal.fire({
+                        title: 'Kính chào quý khách!',
+                        html: 'Quý khách vui lòng: <br> Đặt bánh  và liên hệ tiệm trước 6 - 8 tiếng đối với bánh thường.<br> 3-5 ngày đối với fondant tạo hình để đặt hàng ạ!!!!',
+                        icon: 'success',
+                        confirmButtonColor: '#28a745',
+                        confirmButtonText: 'Cảm ơn quý khách!'
+                    });
+                }
+            document.getElementById('categoryId').addEventListener('change', function () {
+                document.getElementById('filterForm').submit();
+            });
+        </script>
+    }
+
+    <script src="~/home/js/main.js"></script>
+</body>
+</html>
+
+
+

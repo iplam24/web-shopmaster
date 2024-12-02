@@ -1,0 +1,137 @@
+﻿@{
+    ViewData["Title"] = "Quản lý người dùng";
+}
+<div class="container">
+    <div class="row pt-4 pb-3">
+        <div class="col-6">
+            <h2 class="text-primary">
+                QUẢN LÝ TÀI KHOẢN
+            </h2>
+        </div>
+        <div class="col-6 text-end">
+            <a asp-area="Identity" asp-page="/Account/Register" class="btn btn-primary">
+                <i class="bi bi-plus-circle"></i> Thêm tài khoản mới
+            </a>
+        </div>
+    </div>
+</div>
+<div class="container">
+    <h2>Danh sách người dùng</h2>
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Tên</th>
+                <th>Email</th>
+                <th>Điện thoại</th>
+                <th>Công ty</th>
+                <th>Vai trò</th>
+                <th>Trạng thái </th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody id="userTableBody"></tbody>
+    </table>
+</div>
+
+@section scripts{
+ 
+
+    <script>
+
+        function confirmDelete(userId) {
+            // Hiển thị SweetAlert để xác nhận xóa
+            Swal.fire({
+                title: 'Bạn có chắc chắn muốn xóa tài khoản này không?',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#d33',
+                cancelButtonColor: '#3085d6',
+                confirmButtonText: 'Xóa',
+                cancelButtonText: 'Hủy'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    // Nếu người dùng xác nhận, thực hiện cuộc gọi API để xóa người dùng
+                    performDelete(userId);
+                }
+            });
+        }
+
+        function performDelete(userId) {
+            // Thực hiện cuộc gọi API để xóa người dùng
+            $.ajax({
+                type: "POST",
+                url: '/Admin/User/Delete',
+                data: JSON.stringify(userId),
+                contentType: "application/json",
+                success: function (data) {
+                    if (data.success) {
+                        toastr.success(data.message);
+                        location.reload(); // Reload cả trang
+                    } else {
+                        toastr.error(data.message);
+                    }
+                }
+            });
+        }
+        $(document).ready(function () {
+            // Thực hiện cuộc gọi API để lấy dữ liệu người dùng
+            $.ajax({
+                type: "GET",
+                url: "/Admin/User/GetAll",
+                success: function (data) {
+                    // Xử lý dữ liệu trả về và nối vào cơ thể bảng
+                    var tableBody = $("#userTableBody");
+                    tableBody.empty(); // Xóa dữ liệu hiện tại
+
+                    $.each(data.dat, function (index, user) {
+                        var today = new Date().getTime();
+                        var lockout = new Date(user.lockoutEnd).getTime();
+
+                        var lockUnlockButton = (lockout > today) ?
+                            `<a onclick=LockUnlock('${user.id}') class="btn btn-danger text-white" style="cursor:pointer; width:150px;border: 1px solid #fff; ">
+                                        <i class="bi bi-lock-fill"></i> Khóa
+                                    </a>` :
+                            `<a onclick=LockUnlock('${user.id}') class="btn btn-success text-white" style="cursor:pointer; width:150px;border: 1px solid #fff;">
+                                        <i class="bi bi-unlock-fill"></i> Mở khóa
+                                    </a>`;
+
+                        var deleteButton = `<a onclick=confirmDelete('${user.id}') class="btn btn-danger text-white" style="cursor:pointer; width:150px;border: 1px solid #fff;">
+                                        <i class="bi bi-trash"></i> Xóa
+                                    </a>`;
+
+                        var row = "<tr>" +
+                            "<td>" + user.name + "</td>" +
+                            "<td>" + user.email + "</td>" +
+                            "<td>" + user.phoneNumber + "</td>" +
+                            "<td>" + user.userName
+                            + "</td>" +
+                            "<td>" + user.role + "</td>" +
+                            "<td>" + lockUnlockButton + "</td>" +
+                            "<td>" + deleteButton + "</td>";
+
+                        tableBody.append(row);
+                    });
+                },
+                error: function (error) {
+                    console.log("Lỗi khi truy xuất dữ liệu người dùng: " + error);
+                }
+            });
+        });
+
+        function LockUnlock(userId) {
+            // Thực hiện cuộc gọi API để khóa hoặc mở khóa người dùng
+            $.ajax({
+                type: "POST",
+                url: '/Admin/User/LockUnlock',
+                data: JSON.stringify(userId),
+                contentType: "application/json",
+                success: function (data) {
+                    if (data.success) {
+                        toastr.success(data.message);
+                        location.reload(); // Reload cả trang
+                    }
+                }
+            });
+        }
+    </script>
+}

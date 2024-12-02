@@ -1,0 +1,80 @@
+﻿@model List<Product>
+
+<div class="container">
+    <div class="row pt-4 pb-3">
+        <div class="col-6">
+            <h2 class="text-primary">
+                Danh sách sản phẩm 
+            </h2>
+        </div>
+        <div class="col-6 text-end">
+            <a asp-controller="Product" asp-action="Upsert" class="btn btn-primary">
+                <i class="bi bi-plus-circle"></i> Tạo mới
+            </a>
+        </div>
+    </div>
+</div>
+
+<table id="tblData" class=" table table-bordered table-striped">
+ <thead>
+         <tr>
+            <form method="get">
+                <div>
+                    Tìm kiếm theo tiêu đề:<input type="text" name="searchString" value="@ViewBag.CurrentFilter" />
+                </div>
+                <div>
+                    <label for="category">Danh mục:</label>
+                    <select name="category">
+                        <option value="">-- Tất cả các danh mục --</option>
+                        @foreach (var category in ViewBag.Categories)
+                        {
+                            <option value="@category.Name">@category.Name</option>
+                        }
+                    </select>
+                </div>
+                <div>
+                    <button type="submit">Tìm kiếm</button>
+                </div>
+            </form>
+            
+         </tr>
+         
+        <tr >
+            <th>Id</th>
+            <th>Tên Bánh</th>
+            <th>Size - Trọng Lượng</th>
+            <th>Giá</th>
+            <th>Thể Loại</th>
+            <th></th>
+        </tr>
+    </thead>
+
+    <tbody>
+        @foreach (var obj in Model)
+        {
+            <tr>
+                <td>@obj.Id</td>
+                <td>@obj.Title</td>
+                <td>@obj.Size</td>
+                <td>@obj.Price</td>
+                <td>@obj.Category.Name</td>
+
+
+                <td>
+                    <div class=" btn-group" role="group">
+                        <a asp-controller="Product" asp-action="Upsert" asp-route-id="@obj.Id" class="btn btn-primary mx-2">
+                            <i class="bi bi-pencil-square"></i>  Chỉnh sửa
+                        </a>
+                        <a asp-controller="Product" asp-action="Delete" asp-route-id="@obj.Id" class="btn btn-danger mx-2">
+                            <i class="bi bi-trash"></i>Xóa
+
+                        </a>
+                        
+                    </div>
+                </td>
+
+            </tr>
+        }
+    </tbody> 
+
+</table>

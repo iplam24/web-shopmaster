@@ -1,0 +1,90 @@
+﻿@model News
+
+<div class="card shadow border-0 mt-4" >
+    <div class="card-header bg-secondary bg-gradient m-lg-0 py-3">
+        <div class="row">
+            <div class="col-12 text-center">
+                <h2 class="text py-2" style=" color:#f24689;">Đăng ký tư vấn</h2>
+            </div>
+        </div>
+    </div>
+    <div class="card-header bg-secondary bg-gradient m-lg-0 py-3">
+        <div class="row">
+            <div class="col-12 ">
+                <h3 class="text py-2" style=" color:#f24689;">MỌI THẮC MẮC XIN VUI LÒNG LIÊN HỆ:</h3>
+                <h5 class="text-primary py-2"><i style="color:#f24689; margin:0 4px;" class="bi bi-telephone-inbound-fill"></i>0912 999 999</h5>
+                <h5 class="text-primary py-2"><i style="color:#f24689; margin:0 4px;"  class="bi bi-envelope-exclamation-fill"></i>Hotro@piupiu.com</h5>
+            </div>
+        </div>
+    </div>
+    <div class="card-header bg-secondary bg-gradient m-lg-0 py-3">
+        <div class="row">
+            <div class="col-12 ">
+                <h4 class="text py-2" style=" color:#f24689;">HOẶC ĐỂ LẠI THÔNG TIN</h4>
+                
+            </div>
+        </div>
+    </div>
+    <div class="card-body p-4">
+
+        <form method="post" class="row">
+            <div class="border p-3 mt-4">
+
+                
+                <div asp-validation-summary="All"></div>
+                <div class="mb-3 row p-3">
+                    <label asp-for="Name" class="p-2"></label>
+                    <input asp-for="Name" type="text" class="form-control" />
+                    <span asp-validation-for="Name" class="text-danger"></span>
+                </div>
+                <div class="mb-3 row p-3">
+                    <label asp-for="Email" class="p-2"></label>
+                    <input asp-for="Email" type="text" class="form-control" />
+                    <span asp-validation-for="Email" class="text-danger"></span>
+                </div>
+                <div class="mb-3 row p-3">
+                    <label asp-for="Nummber" class="p-2"></label>
+                    <input asp-for="Nummber" type="text" class="form-control" />
+                    <span asp-validation-for="Nummber" class="text-danger"></span>
+                </div>
+
+                <div class="mb-3 row p-1">
+                    <label asp-for="Description" class="p-2 text-mute"></label>
+                    <textarea asp-for="Description" type="text" class="form-control"></textarea>
+                </div>
+
+                
+
+                <div class="mb-3 row p-3">
+                    
+
+                    <div class="row p-4">
+                        <div class="col-6 col-md-3">
+                            <button type="submit" style=" background:#f24689;" class="btn form-control text-primary">Gửi yêu cầu </button>
+
+                        </div>
+                        <div class="col-6 col-md-3">
+                            <a asp-controller="Home" asp-action="Home_new" class="btn btn-outline-secondary  form-control">Quay trở về trang chủ</a>
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+            </div>
+        </form>
+    </div>
+</div>
+@section Scripts{
+    @{
+        <script>
+            tinymce.init({
+                selector: 'textarea',
+                plugins: '  mentions anchor autolink charmap codesample emoticons  searchreplace table visualblocks wordcount  ',
+                toolbar: 'undo redo | blocks fontfamily fontsize | bold italic underline strikethrough |  align lineheight  | '
+            });
+        </script>
+        <partial name="_ValidationScriptsPartial" />
+    }
+}

@@ -1,0 +1,67 @@
+﻿<canvas id="paymentChart" width="800" height="400"></canvas>
+
+@section Scripts{
+    <script>
+        $(document).ready(function () {
+            // Gửi yêu cầu API để lấy dữ liệu thanh toán từ server
+            $.ajax({
+                type: 'GET',
+                url: '/api/payment-data',
+                success: function (data) {
+                    // Dữ liệu trả về từ API
+                    var paymentData = data.paymentData;
+
+                    // Vẽ biểu đồ từ dữ liệu
+                    drawChart(paymentData);
+                }
+            });
+
+            function drawChart(paymentData) {
+                // Tạo dữ liệu cho biểu đồ
+                var chartData = {
+                    labels: paymentData.map(function (payment) {
+                        return payment.date;
+                    }),
+                    datasets: [{
+                        label: 'Doanh thu theo ngày',
+                        data: paymentData.map(function (payment) {
+                            return payment.amount;
+                        }),
+                        backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                        borderColor: 'rgba(75, 192, 192, 1)',
+                        borderWidth: 1
+                    }]
+                };
+
+                // Lấy thẻ canvas và vẽ biểu đồ
+                var ctx = document.getElementById('paymentChart').getContext('2d');
+                var paymentChart = new Chart(ctx, {
+                    type: 'line',
+                    data: chartData,
+                    options: {
+                        scales: {
+                            x: {
+                                type: 'time',
+                                time: {
+                                    parser: 'YYYY-MM-DD',
+                                    unit: 'day',
+                                    displayFormats: {
+                                        day: 'MMM D'
+                                    }
+                                },
+                                position: 'bottom'
+                            },
+                            y: {
+                                type: 'linear',
+                                position: 'left'
+                            }
+                        }
+                    }
+                });
+            }
+        });
+
+
+
+    </script>
+}

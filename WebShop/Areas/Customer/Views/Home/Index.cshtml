@@ -1,0 +1,97 @@
+﻿@model List<IGrouping<Category, Product>>
+
+<form method="get" action="@Url.Action("Index")" id="filterForm">
+    
+    <div class="input-group">
+        <input type="text" class="form-control" placeholder="Tìm kiếm sản phẩm" name="searchTerm">
+        <button class="btn btn-outline-secondary" type="submit">Tìm kiếm</button>
+    </div>
+    <div class="input-group mb-3">
+        <select class="form-select" name="categoryId" id="categoryId">
+            <option value="">Phân loại theo danh mục</option>
+            @foreach (var categoryGroup in Model)
+            {
+                <option value="@categoryGroup.Key.Id">@categoryGroup.Key.Name</option>
+            }
+        </select>
+    </div>
+</form>
+
+
+<div class="input-group">
+
+    <a class="nav-link active " asp-area="Customer" asp-controller="Home" asp-action="Index">Tất cả</a>
+</div>
+
+
+@foreach (var group in Model)
+{
+    <div class="mb-3" style="margin: 25px 0">
+        <h3>@group.Key.Name</h3>
+        <div class="row pb-3">
+            @foreach (var product in group)
+            {
+                <div class=" col-lg-3 col-sm-6">
+
+                    <div class="row p-2">
+                        <div class="col-12 p-1">
+                            <div class="card border-0 shadow border-top border-5 rounded" style="height:500px;">
+
+                                <div class="card-body pb-0">
+                                    <div class="pl-1">
+                                        @if (product.ProductImages != null && product.ProductImages.Count() > 0)
+                                        {
+                                            <img src="@product.ProductImages.FirstOrDefault().ImageUrl" class="card-img-top rounded" style="
+                                     height: 260px; />
+                                }
+                                else
+                                {
+                                <img src="https://placehold.co/500x600/png" class="card-img-top rounded" />
+                                        }
+
+                                    </div>
+                                    <div class="pl-1" style="margin: 25px;">
+                                        <p class="card-title h5 text-dark opacity-75 text-uppercase text-center">@product.Title</p>
+
+                                    </div>
+                                    <div class="pl-1">
+
+                                        <p class="text-dark text-opacity-75 text-center mb-0">
+                                            Kích cỡ:
+                                            <span class="text-decoration-black font-weight-bold">
+                                                @product.Size
+                                            </span>
+                                        </p>
+                                    </div>
+                                    <div class="pl-1">
+                                        <p class="text-danger text-opacity-75 text-center" style="font-size: 20.5px;">
+                                            Giá bán:
+                                            <span>
+                                                @product.Price.ToString("c"+"0")
+                                            </span>
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div>
+                                <a asp-action="Details"
+                                   asp-route-productId="@product.Id"
+                                   class="btn  bg-gradient border-0 form-control" style=" background:#FFADCD;">
+                                    Chi Tiết
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+}
+
+@section Scripts {
+    <script>
+        document.getElementById('categoryId').addEventListener('change', function () {
+            document.getElementById('filterForm').submit();
+        });
+    </script>
+}
